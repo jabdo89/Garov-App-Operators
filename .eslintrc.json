@@ -1,0 +1,28 @@
+{
+  "env": {
+    "es2021": true,
+    "node": true,
+    "react-native/react-native": true
+  },
+  "extends": ["airbnb", "prettier", "prettier/react"],
+  "parserOptions": {
+    "ecmaFeatures": {
+      "jsx": true
+    },
+    "ecmaVersion": 12,
+    "sourceType": "module"
+  },
+  "plugins": ["prettier", "import", "react", "react-native"],
+  "rules": {
+    "import/no-unresolved": [0],
+    "import/prefer-default-export": [0],
+    "no-nested-ternary": [0],
+    "react/jsx-props-no-spreading": [0],
+    "react/forbid-prop-types": [0],
+    "react/react-in-jsx-scope": [0],
+    "prefer-promise-reject-errors": [0],
+    "react/style-prop-object": [0],
+    "arrow-body-style": [0]
+  },
+  "parser": "babel-eslint"
+}
