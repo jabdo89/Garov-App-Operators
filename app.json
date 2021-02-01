@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "app",
-    "slug": "app",
+    "name": "Avviare",
+    "slug": "Avviare",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
