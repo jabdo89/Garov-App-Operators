@@ -1,0 +1,38 @@
+const theme = {
+  light: {
+    'color-primary-100': '#E4FBE0',
+    'color-primary-200': '#C6F7C1',
+    'color-primary-300': '#9CE79E',
+    'color-primary-400': '#7CD085',
+    'color-primary-500': '#52B266',
+    'color-primary-600': '#3B9958',
+    'color-primary-700': '#29804B',
+    'color-primary-800': '#1A6740',
+    'color-primary-900': '#0F5538',
+    'color-primary-transparent-100': 'rgba(82, 178, 102, 0.08)',
+    'color-primary-transparent-200': 'rgba(82, 178, 102, 0.16)',
+    'color-primary-transparent-300': 'rgba(82, 178, 102, 0.24)',
+    'color-primary-transparent-400': 'rgba(82, 178, 102, 0.32)',
+    'color-primary-transparent-500': 'rgba(82, 178, 102, 0.4)',
+    'color-primary-transparent-600': 'rgba(82, 178, 102, 0.48)',
+  },
+  dark: {
+    'color-primary-100': '#E4FBE0',
+    'color-primary-200': '#C6F7C1',
+    'color-primary-300': '#9CE79E',
+    'color-primary-400': '#7CD085',
+    'color-primary-500': '#52B266',
+    'color-primary-600': '#3B9958',
+    'color-primary-700': '#29804B',
+    'color-primary-800': '#1A6740',
+    'color-primary-900': '#0F5538',
+    'color-primary-transparent-100': 'rgba(82, 178, 102, 0.08)',
+    'color-primary-transparent-200': 'rgba(82, 178, 102, 0.16)',
+    'color-primary-transparent-300': 'rgba(82, 178, 102, 0.24)',
+    'color-primary-transparent-400': 'rgba(82, 178, 102, 0.32)',
+    'color-primary-transparent-500': 'rgba(82, 178, 102, 0.4)',
+    'color-primary-transparent-600': 'rgba(82, 178, 102, 0.48)',
+  },
+};
+
+export default theme;

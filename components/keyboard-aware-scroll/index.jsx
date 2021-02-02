@@ -1,24 +1,20 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { StyleSheet } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
-const styles = StyleSheet.create({
-  keyboardAware: {
-    flex: 1,
-  },
-});
-
-const KeyboardAwareScroll = ({ children }) => {
+const KeyboardAwareScroll = ({ children, style }) => {
   return (
-    <KeyboardAwareScrollView contentContainerStyle={styles.keyboardAware}>
-      {children}
-    </KeyboardAwareScrollView>
+    <KeyboardAwareScrollView contentContainerStyle={style[0]}>{children}</KeyboardAwareScrollView>
   );
+};
+
+KeyboardAwareScroll.defaultProps = {
+  style: [{}],
 };
 
 KeyboardAwareScroll.propTypes = {
   children: PropTypes.node.isRequired,
+  style: PropTypes.arrayOf(PropTypes.object),
 };
 
 export default KeyboardAwareScroll;
