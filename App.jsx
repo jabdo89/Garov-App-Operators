@@ -5,40 +5,37 @@ import * as eva from '@eva-design/eva';
 import theme from '@config/theme';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { ThemeProvider } from 'styled-components/native';
-import { UserProvider } from '@providers/user';
-import { SessionProvider, useSession } from '@providers/session';
-import { ApolloProvider } from '@apollo/client';
-import client from '@graphql';
 import { ApplicationProvider, IconRegistry } from '@ui-kitten/components';
 import Splash from '@components/splash';
-import Screens from '@screens';
+import { AuthProvider, useAuth } from '@providers/auth';
+import Main from '@navigators/main';
+import Auth from '@navigators/auth';
 
 const App = () => {
-  const { loadingSession } = useSession();
+  const { isLogged, loading } = useAuth();
 
-  let content;
+  if (loading) return <Splash />;
 
-  if (loadingSession) content = <Splash />;
-  else content = <Screens />;
+  if (isLogged) return <Main />;
 
-  return (
-    <>
-      <IconRegistry icons={EvaIconsPack} />
-      <NavigationContainer>
-        <SafeAreaProvider>
-          <ThemeProvider theme={{ ...eva.light, ...theme.light }}>
-            <ApplicationProvider {...eva} theme={{ ...eva.light, ...theme.light }}>
-              <ApolloProvider client={client}>
-                <SessionProvider>
-                  <UserProvider>{content}</UserProvider>
-                </SessionProvider>
-              </ApolloProvider>
-            </ApplicationProvider>
-          </ThemeProvider>
-        </SafeAreaProvider>
-      </NavigationContainer>
-    </>
-  );
+  return <Auth />;
 };
 
-export default App;
+const ContextualizedApp = () => (
+  <>
+    <IconRegistry icons={EvaIconsPack} />
+    <NavigationContainer>
+      <SafeAreaProvider>
+        <ThemeProvider theme={{ ...eva.light, ...theme.light }}>
+          <ApplicationProvider {...eva} theme={{ ...eva.light, ...theme.light }}>
+            <AuthProvider>
+              <App />
+            </AuthProvider>
+          </ApplicationProvider>
+        </ThemeProvider>
+      </SafeAreaProvider>
+    </NavigationContainer>
+  </>
+);
+
+export default ContextualizedApp;

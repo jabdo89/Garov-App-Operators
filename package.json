@@ -10,7 +10,6 @@
     "format": "prettier --write"
   },
   "dependencies": {
-    "@apollo/client": "3.2.4",
     "@eva-design/eva": "^2.0.0",
     "@react-native-async-storage/async-storage": "^1.13.4",
     "@react-native-community/masked-view": "0.1.10",
@@ -22,10 +21,9 @@
     "axios": "^0.21.1",
     "babel-preset-expo": "^8.3.0",
     "expo": "~40.0.0",
-    "expo-constants": "^10.0.1",
+    "expo-constants": "~9.3.3",
     "expo-status-bar": "~1.0.3",
-    "graphql": "^15.5.0",
-    "jwt-decode": "^3.1.2",
+    "firebase": "7.9.0",
     "prop-types": "^15.7.2",
     "react": "16.13.1",
     "react-dom": "16.13.1",
