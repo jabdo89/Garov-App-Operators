@@ -12,8 +12,8 @@ const AuthProvider = ({ children }) => {
     const unsubscribe = auth().onAuthStateChanged(async (authentication) => {
       if (authentication) {
         const userSnapshot = await db()
-          .collection('Users')
-          .where('uid', '==', authentication.uid)
+          .collection('Operadores')
+          .where('userID', '==', authentication.uid)
           .get();
 
         let userToSet;

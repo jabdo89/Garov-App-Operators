@@ -3,13 +3,12 @@ import 'firebase/auth';
 import 'firebase/firestore';
 
 const firebaseConfig = {
-  apiKey: 'AIzaSyA4qFv0IwSgRr6Kk9NLtHCRPxKPlUbpzzI',
-  authDomain: 'passeio-a1488.firebaseapp.com',
-  projectId: 'passeio-a1488',
-  storageBucket: 'passeio-a1488.appspot.com',
-  messagingSenderId: '891098839887',
-  appId: '1:891098839887:web:5124ae0960c5c39939233a',
-  measurementId: 'G-83SXNCRXDP',
+  apiKey: 'AIzaSyBJw23LISlNz7E8hbKk9aqRYK53rxIGT48',
+  authDomain: 'garov-3c5b2.firebaseapp.com',
+  projectId: 'garov-3c5b2',
+  storageBucket: 'garov-3c5b2.appspot.com',
+  messagingSenderId: '451240460429',
+  appId: '1:451240460429:web:6409be76e527062e6862c4',
 };
 
 if (!firebase.apps.length) {

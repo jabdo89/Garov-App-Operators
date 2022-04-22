@@ -4,14 +4,12 @@ import KeyboardAwareScroll from '@components/keyboard-aware-scroll';
 import { StatusBar } from 'expo-status-bar';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { TouchableWithoutFeedback, View } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
 import { emailPattern } from '@config/constants';
-import { Icon, Button, Spinner } from '@ui-kitten/components';
+import { Icon, Spinner } from '@ui-kitten/components';
 import { Content, Header, Title, Subtitle, Input, SigninButton } from './elements';
 
 const Login = () => {
   const { top } = useSafeAreaInsets();
-  const { navigate } = useNavigation();
   const [form, setForm] = useState({
     email: '',
     password: '',
@@ -50,7 +48,7 @@ const Login = () => {
     <KeyboardAwareScroll>
       <StatusBar style="auto" />
       <Header pt={top} level="2">
-        <Title category="h3">Bienvenido</Title>
+        <Title category="h3">Garov</Title>
         <Subtitle category="h6">Inicia sesión</Subtitle>
       </Header>
       <Content>
@@ -88,9 +86,6 @@ const Login = () => {
           secureTextEntry={secureTextEntry}
           onChangeText={(nextValue) => setForm({ ...form, password: nextValue })}
         />
-        <Button onPress={() => navigate('RecoverPassword')} appearance="ghost" size="tiny">
-          ¿Olvidaste tu contraseña?
-        </Button>
         <SigninButton
           accessoryLeft={
             submitting
@@ -107,9 +102,6 @@ const Login = () => {
         >
           Iniciar sesión
         </SigninButton>
-        <Button onPress={() => navigate('Signup')} appearance="ghost">
-          ¿No tienes cuenta? Crea una.
-        </Button>
       </Content>
     </KeyboardAwareScroll>
   );

@@ -28,18 +28,16 @@ const Options = () => {
           />
           <TextSection>
             <Text category="c2">Bienvenido</Text>
-            <Text category="h6">
-              {user.firstName} {user.lastName}
-            </Text>
+            <Text category="h6">{user.nombre}</Text>
           </TextSection>
         </AvatarSection>
         <Content>
           <TouchableOpacity onPress={() => toggleExitModal(true)}>
-            <Row>
-              <OptionText>Salir</OptionText>
+            <Row style={{ marginTop: 40 }}>
+              <OptionText>Cerrar Sesión</OptionText>
               <Icon
-                height={22}
-                width={22}
+                height={32}
+                width={32}
                 fill={theme['color-danger-600']}
                 name="log-out-outline"
               />

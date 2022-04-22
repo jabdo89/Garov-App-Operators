@@ -1,8 +1,10 @@
 {
   "expo": {
-    "name": "Avviare",
-    "slug": "Avviare",
+    "name": "Garov",
+    "slug": "Garov",
     "version": "1.0.0",
+    "privacy": "public",
+    "description": "Garov",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
