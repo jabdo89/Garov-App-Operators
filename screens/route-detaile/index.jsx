@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import moment from 'moment';
 import 'moment/locale/es';
-import { useNavigation, useIsFocused } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import { View, Alert } from 'react-native';
 import shortid from 'shortid';
 import firebase from 'firebase';
@@ -16,13 +16,12 @@ import {
   HeaderContainer,
   InfoContainer,
   NumberContainer,
-  Tag,
   TitleContainer,
 } from './elements';
 
 const RouteModal = ({
   route: {
-    params: { route: propsRoute },
+    params: { route: propsRoute, onFinish = () => {} },
   },
 }) => {
   const [route] = useState(propsRoute);
@@ -133,6 +132,7 @@ const RouteModal = ({
       .doc(route.id)
       .update({ estatus: 'Completado' })
       .then(() => {
+        onFinish();
         Alert.alert('Corrida Completada', 'Gracias!', [
           { text: 'OK', onPress: () => navigate('Home') },
         ]);
@@ -154,24 +154,6 @@ const RouteModal = ({
         <InfoContainer>
           <Text appearance="hint">Numero de Corrida: </Text>
           <Text category="h5">{route.numCorrida}</Text>
-          {/* <TagsContainer>
-            <Tag color="success">
-              <Text appearance="alternative">{moment(route.fecha.seconds).format('dddd, LL')}</Text>
-            </Tag>
-            <Tag color="success">
-              <WithIcon>
-                <Icon
-                  height={16}
-                  width={16}
-                  fill={theme['background-basic-color-1']}
-                  name="clock-outline"
-                />
-                <Text appearance="alternative">
-                  {moment(route.fecha.seconds).format('hh:mm a')}
-                </Text>
-              </WithIcon>
-            </Tag>
-          </TagsContainer> */}
         </InfoContainer>
         {paradas !== [] && (
           <List
@@ -196,7 +178,7 @@ const RouteModal = ({
                               {index + 1}
                             </Text>
                           </NumberContainer>
-                          <Text category="h6">Guia: {item.numGuia}</Text>
+                          <Text category="h6">Guia: {item.delivery}</Text>
                         </View>
                         {item.estatus === 'En Corrida' && (
                           <View
@@ -230,31 +212,13 @@ const RouteModal = ({
                         )}
                       </View>
                     </HeaderContainer>
-                    <Text category="s1">{item.dirrecion}</Text>
+                    <Text category="s1">{item.nombreDestinatario}</Text>
+                    <Text>{item.dDireccion}</Text>
+                    <Text>{item.dCodigoPostal}</Text>
                   </View>
                 )}
               >
-                <DetailTitle category="s1">
-                  Cantidad de Paquetes: #{item.paquetes.length}
-                </DetailTitle>
-                {item.paquetes.map((paquete) => {
-                  return (
-                    <View
-                      style={{
-                        display: 'flex',
-                        justifyContent: 'flex-start',
-                        flexDirection: 'row',
-                      }}
-                    >
-                      <Tag color="warning">
-                        <Text style={{ color: 'white' }}> {paquete.tipoDePaquete}</Text>
-                      </Tag>
-                      <Tag color="warning">
-                        <Text style={{ color: 'white' }}> {paquete.peso} Kg</Text>
-                      </Tag>
-                    </View>
-                  );
-                })}
+                <DetailTitle category="s1">Cantidad de Paquetes: #{item.cantidadPqte}</DetailTitle>
               </Card>
             )}
           />

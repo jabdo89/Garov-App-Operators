@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import React, { useEffect, useState } from 'react';
 import { View } from 'react-native';
 import { useAuth } from '@providers/auth';
@@ -36,6 +37,27 @@ const Home = () => {
     };
     query();
   }, [user]);
+
+  const query = () => {
+    const db = firebase.firestore();
+    db.collection('Corridas').onSnapshot((querySnapshot) => {
+      let corridasArray = [];
+      querySnapshot.forEach((doc) => {
+        const data = doc.data();
+        if (data.operador === user.userID) {
+          corridasArray.push(data);
+          if (data.estatus === 'activo') {
+            setCorridaActual(data);
+          } else {
+            setCorridaActual(null);
+          }
+        }
+      });
+      corridasArray = corridasArray.slice().sort((a, b) => b.fecha.seconds - a.fecha.seconds);
+
+      setCorridas(corridasArray);
+    });
+  };
 
   const renderItemAccessory = () => <Button size="tiny">Detalle</Button>;
 
@@ -96,6 +118,7 @@ const Home = () => {
                     tipo: corridaActual.tipo,
                     unidad: corridaActual.unidad,
                   },
+                  onFinish: query,
                 })
               }
             >
