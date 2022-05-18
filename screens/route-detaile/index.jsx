@@ -152,8 +152,8 @@ const RouteModal = ({
           />
         </TitleContainer>
         <InfoContainer>
-          <Text appearance="hint">Numero de Corrida: </Text>
-          <Text category="h5">{route.numCorrida}</Text>
+          <Text appearance="hint">Tipo de Corrida: </Text>
+          <Text category="h5">{route.tipo}</Text>
         </InfoContainer>
         {paradas !== [] && (
           <List
@@ -180,7 +180,7 @@ const RouteModal = ({
                           </NumberContainer>
                           <Text category="h6">Guia: {item.delivery}</Text>
                         </View>
-                        {item.estatus === 'En Corrida' && (
+                        {item.estatus === 'En Corrida' && route.tipo !== 'Corrida a Bodega' && (
                           <View
                             style={{
                               display: 'flex',
@@ -209,6 +209,9 @@ const RouteModal = ({
                         )}
                         {item.estatus === 'Regresado' && (
                           <Text style={{ color: 'red' }}>Regresado</Text>
+                        )}
+                        {item.estatus === 'Documentado' && (
+                          <Text style={{ color: 'green' }}>En Bodega</Text>
                         )}
                       </View>
                     </HeaderContainer>
