@@ -83,6 +83,10 @@ const RouteModal = ({
 
     const imgRef = firebase.storage().ref().child(`corridas-images/${shortid.generate()}`);
     const task = imgRef.put(imageBlob);
+
+    const tempArray = itemChanging.eventos;
+    tempArray.push({ statusid: 6, status: 'Entregado', fecha: new Date() });
+
     task.on(
       'state_changed',
       () => {},
@@ -91,7 +95,7 @@ const RouteModal = ({
         imgRef.getDownloadURL().then((url) => {
           db.collection('Guias')
             .doc(itemChanging.id)
-            .update({ estatus: 'Entregado', preEvidencia: url })
+            .update({ estatus: 'Entregado', preEvidencia: url, eventos: tempArray })
             .then(() => {
               Alert.alert('Guia Entregada');
               query();
@@ -104,9 +108,13 @@ const RouteModal = ({
 
   const regresarPaquete = (item) => {
     const db = firebase.firestore();
+
+    const tempArray = item.eventos;
+    tempArray.push({ statusid: 5, status: 'Regresado', fecha: new Date() });
+
     db.collection('Guias')
       .doc(item.id)
-      .update({ estatus: 'Regresado' })
+      .update({ estatus: 'Regresado', eventos: tempArray })
       .then(() => {
         Alert.alert('Guia Regresada');
         query();
