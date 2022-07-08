@@ -4,11 +4,10 @@ import moment from 'moment';
 import 'moment/locale/es';
 import { useNavigation } from '@react-navigation/native';
 import { View, Alert } from 'react-native';
-import shortid from 'shortid';
 import firebase from 'firebase';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Card, Icon, List, Text, Button } from '@ui-kitten/components';
-import TakePhotoModal from '../../templates/take-photo-modal';
+import EvidenciaModal from './components/evidence-modal';
 import {
   CloseButton,
   Container,
@@ -33,7 +32,7 @@ const RouteModal = ({
   const { navigate } = useNavigation();
 
   const [itemChanging, setItemChanging] = useState('');
-  const [isTakePhotoModalOpen, toggleTakePhotoModal] = useState(false);
+  const [isEvidenceModalOpen, toggleEvidenceModal] = useState(false);
 
   moment.locale('es');
 
@@ -76,36 +75,6 @@ const RouteModal = ({
     }
   };
 
-  const savePhoto = async ({ imageBlob }) => {
-    // Do not request access because this relies on the driver already gave access
-    // in the Home screen
-    const db = firebase.firestore();
-
-    const imgRef = firebase.storage().ref().child(`corridas-images/${shortid.generate()}`);
-    const task = imgRef.put(imageBlob);
-
-    const tempArray = itemChanging.eventos;
-    tempArray.push({ statusid: 6, status: 'Entregado', fecha: new Date() });
-
-    task.on(
-      'state_changed',
-      () => {},
-      () => {},
-      () => {
-        imgRef.getDownloadURL().then((url) => {
-          db.collection('Guias')
-            .doc(itemChanging.id)
-            .update({ estatus: 'Entregado', preEvidencia: url, eventos: tempArray })
-            .then(() => {
-              Alert.alert('Guia Entregada');
-              query();
-            });
-          setItemChanging('');
-        });
-      }
-    );
-  };
-
   const regresarPaquete = (item) => {
     const db = firebase.firestore();
 
@@ -123,7 +92,7 @@ const RouteModal = ({
 
   const entregarPaquete = (item) => {
     setItemChanging(item);
-    toggleTakePhotoModal(true);
+    toggleEvidenceModal(true);
   };
 
   const checkCorridaStatus = () => {
@@ -238,12 +207,23 @@ const RouteModal = ({
         <Button onPress={() => completarCorrida()} disabled={checkCorridaStatus()}>
           Completar Corrida
         </Button>
-        <TakePhotoModal
+        {/* <TakePhotoModal
           visible={isTakePhotoModalOpen}
           onClose={() => toggleTakePhotoModal(false)}
           onPhotoTaken={savePhoto}
           animationType="slide"
-        />
+        /> */}
+        {isEvidenceModalOpen ? (
+          <EvidenciaModal
+            visible={isEvidenceModalOpen}
+            onClose={() => {
+              toggleEvidenceModal(false);
+            }}
+            parada={itemChanging}
+            query={query}
+            setItemChanging={setItemChanging}
+          />
+        ) : null}
       </Container>
     </>
   );
