@@ -59,8 +59,6 @@ const Home = () => {
     });
   };
 
-  const renderItemAccessory = ({ item }) => <Button size="tiny">{item}</Button>;
-
   const renderItemIcon = (props) => <Icon {...props} name="car" />;
 
   const renderItem = ({ item }) => (
@@ -68,7 +66,29 @@ const Home = () => {
       title={item.id}
       description={moment(item.fecha.seconds * 1000).format('ddd, D MMM')}
       accessoryLeft={renderItemIcon}
-      accessoryRight={() => <Button size="tiny">{item.estatus}</Button>}
+      accessoryRight={() => (
+        <Button
+          size="tiny"
+          onPress={() =>
+            item.estatus === 'activo'
+              ? navigate('Corrida', {
+                  route: {
+                    estatus: item.estatus,
+                    guias: item.guias,
+                    id: item.id,
+                    numCorrida: item.numCorrida,
+                    operador: item.operador,
+                    tipo: item.tipo,
+                    unidad: item.unidad,
+                  },
+                  onFinish: query,
+                })
+              : null
+          }
+        >
+          {item.estatus}
+        </Button>
+      )}
     />
   );
 

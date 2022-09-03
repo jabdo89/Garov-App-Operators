@@ -8,6 +8,7 @@ import firebase from 'firebase';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Card, Icon, List, Text, Button } from '@ui-kitten/components';
 import EvidenciaModal from './components/evidence-modal';
+import ReturnedModal from './components/returned-modal';
 import {
   CloseButton,
   Container,
@@ -23,8 +24,6 @@ const RouteModal = ({
     params: { route: propsRoute, onFinish = () => {} },
   },
 }) => {
-  const [route] = useState(propsRoute);
-
   const [paradas, setParadas] = useState([]);
 
   const { top } = useSafeAreaInsets();
@@ -33,6 +32,7 @@ const RouteModal = ({
 
   const [itemChanging, setItemChanging] = useState('');
   const [isEvidenceModalOpen, toggleEvidenceModal] = useState(false);
+  const [isReturnedModalOpen, toggleReturnedModal] = useState(false);
 
   moment.locale('es');
 
@@ -40,35 +40,33 @@ const RouteModal = ({
     const db = firebase.firestore();
     const query = async () => {
       const parradasArray = [];
-
       // eslint-disable-next-line no-plusplus
-      for (let i = 0; i < route.guias.length; i++) {
+      for (let i = 0; i < propsRoute.guias.length; i++) {
         db.collection('Guias')
-          .doc(route.guias[i])
+          .doc(propsRoute.guias[i])
           .get()
           .then((doc) => {
             parradasArray.push(doc.data());
-            if (i === route.guias.length - 1) {
+            if (i === propsRoute.guias.length - 1) {
               setParadas(parradasArray);
             }
           });
       }
     };
-
     query();
-  }, [route]);
+  }, [propsRoute]);
 
   const query = async () => {
     const parradasArray = [];
     const db = firebase.firestore();
     // eslint-disable-next-line no-plusplus
-    for (let i = 0; i < route.guias.length; i++) {
+    for (let i = 0; i < propsRoute.guias.length; i++) {
       db.collection('Guias')
-        .doc(route.guias[i])
+        .doc(propsRoute.guias[i])
         .get()
         .then((doc) => {
           parradasArray.push(doc.data());
-          if (i === route.guias.length - 1) {
+          if (i === propsRoute.guias.length - 1) {
             setParadas(parradasArray);
           }
         });
@@ -76,18 +74,8 @@ const RouteModal = ({
   };
 
   const regresarPaquete = (item) => {
-    const db = firebase.firestore();
-
-    const tempArray = item.eventos;
-    tempArray.push({ statusid: 5, status: 'Regresado', fecha: new Date() });
-
-    db.collection('Guias')
-      .doc(item.id)
-      .update({ estatus: 'Regresado', eventos: tempArray })
-      .then(() => {
-        Alert.alert('Guia Regresada');
-        query();
-      });
+    setItemChanging(item);
+    toggleReturnedModal(true);
   };
 
   const entregarPaquete = (item) => {
@@ -96,6 +84,7 @@ const RouteModal = ({
   };
 
   const checkCorridaStatus = () => {
+    if (propsRoute.tipo === 'Devolucion') return false;
     // eslint-disable-next-line no-plusplus
     for (let i = 0; i < paradas.length; i++) {
       if (paradas[i].estatus === 'En Corrida') return true;
@@ -106,7 +95,7 @@ const RouteModal = ({
   const completarCorrida = () => {
     const db = firebase.firestore();
     db.collection('Corridas')
-      .doc(route.id)
+      .doc(propsRoute.id)
       .update({ estatus: 'Completado' })
       .then(() => {
         onFinish();
@@ -130,7 +119,7 @@ const RouteModal = ({
         </TitleContainer>
         <InfoContainer>
           <Text appearance="hint">Tipo de Corrida: </Text>
-          <Text category="h5">{route.tipo}</Text>
+          <Text category="h5">{propsRoute.tipo}</Text>
         </InfoContainer>
         {paradas !== [] && (
           <List
@@ -157,7 +146,7 @@ const RouteModal = ({
                           </NumberContainer>
                           <Text category="h6">Guia: {item.delivery}</Text>
                         </View>
-                        {item.estatus === 'En Corrida' && route.tipo !== 'Corrida a Bodega' && (
+                        {item.estatus === 'En Corrida' && propsRoute.tipo !== 'Corrida a Bodega' && (
                           <View
                             style={{
                               display: 'flex',
@@ -218,6 +207,17 @@ const RouteModal = ({
             visible={isEvidenceModalOpen}
             onClose={() => {
               toggleEvidenceModal(false);
+            }}
+            parada={itemChanging}
+            query={query}
+            setItemChanging={setItemChanging}
+          />
+        ) : null}
+        {isReturnedModalOpen ? (
+          <ReturnedModal
+            visible={isReturnedModalOpen}
+            onClose={() => {
+              toggleReturnedModal(false);
             }}
             parada={itemChanging}
             query={query}
