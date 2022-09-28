@@ -32,11 +32,19 @@ const EvidenciaModal = ({ visible, onClose, parada, query }) => {
           if (tryNum === 0) {
             setTryNum(2);
             const tempArray = [...parada.eventos];
-            tempArray.push({ statusid: 6, status: 'Entregado', fecha: new Date() });
+            if (parada.estatus === 'Devolucion') {
+              tempArray.push({ statusid: 8, status: 'Devolucion', fecha: new Date() });
+            } else {
+              tempArray.push({ statusid: 6, status: 'Entregado', fecha: new Date() });
+            }
 
             db.collection('Guias')
               .doc(parada.id)
-              .update({ estatus: 'Entregado', preEvidencia: url, eventos: tempArray })
+              .update({
+                estatus: parada.estatus === 'Devolucion' ? 'Devolucion' : 'Entregado',
+                preEvidencia: url,
+                eventos: tempArray,
+              })
               .then(() => {
                 setImg(url);
                 setUploadingImage(false);

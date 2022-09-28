@@ -152,7 +152,7 @@ const Home = () => {
           <Text style={{ fontSize: 20, fontWeight: '600' }}>Historial de Corridas</Text>
           <List
             style={{
-              maxHeight: '140%',
+              maxHeight: '70%',
             }}
             data={corridas}
             renderItem={renderItem}

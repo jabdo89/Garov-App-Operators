@@ -84,10 +84,16 @@ const RouteModal = ({
   };
 
   const checkCorridaStatus = () => {
-    if (propsRoute.tipo === 'Devolucion') return false;
-    // eslint-disable-next-line no-plusplus
-    for (let i = 0; i < paradas.length; i++) {
-      if (paradas[i].estatus === 'En Corrida') return true;
+    if (propsRoute.tipo === 'Devolucion') {
+      // eslint-disable-next-line no-plusplus
+      for (let i = 0; i < paradas.length; i++) {
+        if (!paradas[i].preEvidencia) return true;
+      }
+    } else {
+      // eslint-disable-next-line no-plusplus
+      for (let i = 0; i < paradas.length; i++) {
+        if (paradas[i].estatus === 'En Corrida') return true;
+      }
     }
     return false;
   };
@@ -144,9 +150,9 @@ const RouteModal = ({
                               {index + 1}
                             </Text>
                           </NumberContainer>
-                          <Text category="h6">Guia: {item.delivery}</Text>
+                          <Text category="h6">Guia: {item?.delivery}</Text>
                         </View>
-                        {item.estatus === 'En Corrida' && propsRoute.tipo !== 'Corrida a Bodega' && (
+                        {item?.estatus === 'En Corrida' && propsRoute.tipo !== 'Corrida a Bodega' && (
                           <View
                             style={{
                               display: 'flex',
@@ -170,24 +176,33 @@ const RouteModal = ({
                             </Button>
                           </View>
                         )}
-                        {item.estatus === 'Entregado' && (
+                        {item?.estatus === 'Devolucion' && !item?.preEvidencia && (
+                          <Button appearance="ghost" onPress={() => entregarPaquete(item)}>
+                            <Icon
+                              style={{ height: 32, width: 32 }}
+                              fill="green"
+                              name="checkmark-square-2"
+                            />
+                          </Button>
+                        )}
+                        {item?.estatus === 'Entregado' && (
                           <Text style={{ color: 'green' }}>Entregado</Text>
                         )}
-                        {item.estatus === 'Regresado' && (
+                        {item?.estatus === 'Regresado' && (
                           <Text style={{ color: 'red' }}>Regresado</Text>
                         )}
-                        {item.estatus === 'Documentado' && (
+                        {item?.estatus === 'Documentado' && (
                           <Text style={{ color: 'green' }}>En Bodega</Text>
                         )}
                       </View>
                     </HeaderContainer>
-                    <Text category="s1">{item.nombreDestinatario}</Text>
-                    <Text>{item.dDireccion}</Text>
-                    <Text>{item.dCodigoPostal}</Text>
+                    <Text category="s1">{item?.nombreDestinatario}</Text>
+                    <Text>{item?.dDireccion}</Text>
+                    <Text>{item?.dCodigoPostal}</Text>
                   </View>
                 )}
               >
-                <DetailTitle category="s1">Cantidad de Paquetes: #{item.cantidadPqte}</DetailTitle>
+                <DetailTitle category="s1">Cantidad de Paquetes: #{item?.cantidadPqte}</DetailTitle>
               </Card>
             )}
           />
