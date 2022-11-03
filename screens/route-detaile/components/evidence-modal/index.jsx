@@ -20,7 +20,7 @@ const EvidenciaModal = ({ visible, onClose, parada, query }) => {
     // in the Home screen
     const db = firebase.firestore();
     setUploadingImage(true);
-    const imgRef = firebase.storage().ref().child(`corridas-images/${shortid.generate()}`);
+    const imgRef = firebase.storage().ref().child(`corridas-images2/${shortid.generate()}`);
     const task = imgRef.put(imageBlob);
 
     task.on(

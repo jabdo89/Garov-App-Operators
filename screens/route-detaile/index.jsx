@@ -5,6 +5,7 @@ import 'moment/locale/es';
 import { useNavigation } from '@react-navigation/native';
 import { View, Alert } from 'react-native';
 import firebase from 'firebase';
+import openMap from 'react-native-open-maps';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Card, Icon, List, Text, Button } from '@ui-kitten/components';
 import EvidenciaModal from './components/evidence-modal';
@@ -131,52 +132,34 @@ const RouteModal = ({
           <List
             data={paradas}
             renderItem={({ item, index }) => (
-              <Card
-                header={(props) => (
-                  <View {...props}>
-                    <HeaderContainer style={{ width: '90%' }}>
-                      <View
-                        style={{
-                          display: 'flex',
-                          flexDirection: 'row',
-                          width: '100%',
-                          justifyContent: 'space-between',
-                          alignItems: 'center',
-                        }}
-                      >
-                        <View style={{ flexDirection: 'row' }}>
-                          <NumberContainer>
-                            <Text style={{ color: 'white' }} category="s1">
-                              {index + 1}
-                            </Text>
-                          </NumberContainer>
-                          <Text category="h6">Guia: {item?.delivery}</Text>
-                        </View>
-                        {item?.estatus === 'En Corrida' && propsRoute.tipo !== 'Corrida a Bodega' && (
-                          <View
-                            style={{
-                              display: 'flex',
-                              flexDirection: 'row',
-                              justifyContent: 'space-between',
-                            }}
-                          >
-                            <Button appearance="ghost" onPress={() => entregarPaquete(item)}>
-                              <Icon
-                                style={{ height: 32, width: 32 }}
-                                fill="green"
-                                name="checkmark-square-2"
-                              />
-                            </Button>
-                            <Button appearance="ghost" onPress={() => regresarPaquete(item)}>
-                              <Icon
-                                style={{ height: 32, width: 32 }}
-                                fill="red"
-                                name="close-square"
-                              />
-                            </Button>
-                          </View>
-                        )}
-                        {item?.estatus === 'Devolucion' && !item?.preEvidencia && (
+              <Card>
+                <View>
+                  <HeaderContainer style={{ width: '90%' }}>
+                    <View
+                      style={{
+                        display: 'flex',
+                        flexDirection: 'row',
+                        width: '100%',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                      }}
+                    >
+                      <View style={{ flexDirection: 'row' }}>
+                        <NumberContainer>
+                          <Text style={{ color: 'white' }} category="s1">
+                            {index + 1}
+                          </Text>
+                        </NumberContainer>
+                        <Text category="h6">Guia: {item?.delivery}</Text>
+                      </View>
+                      {item?.estatus === 'En Corrida' && propsRoute.tipo !== 'Corrida a Bodega' && (
+                        <View
+                          style={{
+                            display: 'flex',
+                            flexDirection: 'row',
+                            justifyContent: 'space-between',
+                          }}
+                        >
                           <Button appearance="ghost" onPress={() => entregarPaquete(item)}>
                             <Icon
                               style={{ height: 32, width: 32 }}
@@ -184,25 +167,62 @@ const RouteModal = ({
                               name="checkmark-square-2"
                             />
                           </Button>
-                        )}
-                        {item?.estatus === 'Entregado' && (
-                          <Text style={{ color: 'green' }}>Entregado</Text>
-                        )}
-                        {item?.estatus === 'Regresado' && (
-                          <Text style={{ color: 'red' }}>Regresado</Text>
-                        )}
-                        {item?.estatus === 'Documentado' && (
-                          <Text style={{ color: 'green' }}>En Bodega</Text>
-                        )}
-                      </View>
-                    </HeaderContainer>
-                    <Text category="s1">{item?.nombreDestinatario}</Text>
-                    <Text>{item?.dDireccion}</Text>
-                    <Text>{item?.dCodigoPostal}</Text>
+                          <Button appearance="ghost" onPress={() => regresarPaquete(item)}>
+                            <Icon
+                              style={{ height: 32, width: 32 }}
+                              fill="red"
+                              name="close-square"
+                            />
+                          </Button>
+                        </View>
+                      )}
+                      {item?.estatus === 'Devolucion' && !item?.preEvidencia && (
+                        <Button appearance="ghost" onPress={() => entregarPaquete(item)}>
+                          <Icon
+                            style={{ height: 32, width: 32 }}
+                            fill="green"
+                            name="checkmark-square-2"
+                          />
+                        </Button>
+                      )}
+                      {item?.estatus === 'Entregado' && (
+                        <Text style={{ color: 'green' }}>Entregado</Text>
+                      )}
+                      {item?.estatus === 'Regresado' && (
+                        <Text style={{ color: 'red' }}>Regresado</Text>
+                      )}
+                      {item?.estatus === 'Documentado' && (
+                        <Text style={{ color: 'green' }}>En Bodega</Text>
+                      )}
+                    </View>
+                  </HeaderContainer>
+                  <Text category="s1">{item?.nombreDestinatario}</Text>
+                  <Text>{item?.dDireccion}</Text>
+                  <Text>{item?.dCodigoPostal}</Text>
+                  <View
+                    style={{
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      flexDirection: 'row',
+                    }}
+                  >
+                    <DetailTitle category="s1">
+                      Cantidad de Paquetes: #{item?.cantidadPqte}
+                    </DetailTitle>
+                    <Button
+                      appearance="ghost"
+                      onPress={() =>
+                        openMap({
+                          end: `${item?.dDireccion},${item?.dCiudad},${item?.dCodigoPostal},${item?.dEstado}`,
+                          navigate_mode: 'navigate',
+                          provider: 'google',
+                        })
+                      }
+                    >
+                      <Icon style={{ height: 70, width: 70 }} fill="blue" name="pin-outline" />
+                    </Button>
                   </View>
-                )}
-              >
-                <DetailTitle category="s1">Cantidad de Paquetes: #{item?.cantidadPqte}</DetailTitle>
+                </View>
               </Card>
             )}
           />
